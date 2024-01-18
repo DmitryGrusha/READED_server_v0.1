@@ -1,7 +1,7 @@
 import json
 
 
-def decode(request, keys_array):
+def utils_decode(request, keys_array):
     try:
         data = json.loads(request.body.decode('utf-8'))
 
