@@ -16,9 +16,10 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from user_module.views import register_user
+from user_module.views import register_user, get_user
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/registerUser/', register_user),
+    path('api/getUser/', get_user),
 ]
