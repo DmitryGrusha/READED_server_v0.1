@@ -26,25 +26,27 @@ def register_user(request):
                                                    email=data.get('email', None))
             # user created
             if user_creating_result:
-                return JsonResponse({'type': 'SUCCESS', 'answer': user_creating_message,
-                                     'user': {
+                # return JsonResponse({'type': 'SUCCESS', 'answer': user_creating_message,
+                return JsonResponse({'user': {
                                          'id': user.id,
                                          'username': user.username,
                                          'name': user.name,
                                          'last_name': user.last_name,
                                          'country_code': user.country_code,
                                          'phone_number': user.phone_number,
-                                         'email': user.email}})
+                                         'email': user.email}}, status=200)
             # user creating failure
             else:
-                return JsonResponse({'type': 'ERROR', 'answer': user_creating_message})
+                return JsonResponse({'message': user_creating_message}, status=400)
+                # return JsonResponse({'type': 'ERROR', 'answer': user_creating_message})
         # decoding failure
         else:
-            return JsonResponse({'type': 'ERROR', 'answer': data})
+            # return JsonResponse({'type': 'ERROR', 'answer': data})
+            return JsonResponse({'message': data}, status=400)
     # wrong request method
     else:
-        return JsonResponse({'type': 'ERROR', 'answer': 'Method not allowed.'})
-
+        # return JsonResponse({'type': 'ERROR', 'answer': 'Method not allowed.'})
+        return JsonResponse({'message': 'Method not allowed.'}, status=400)
 
 @csrf_exempt
 def get_user(request):
@@ -53,12 +55,16 @@ def get_user(request):
         if decode_result:
             result, serializable_user = db_manager.get_user_from_db(decode_message_or_data.get('id', None))
             if result:
-                return JsonResponse({'type': 'SUCCESS', 'answer': '',
-                                     'user': serializable_user})
+                return JsonResponse({'user': serializable_user}, status=200)
+                # return JsonResponse({'type': 'SUCCESS', 'answer': '',
+                #                      'user': serializable_user})
             else:
                 error_msg = serializable_user
-                return JsonResponse({'type': 'ERROR', 'answer': error_msg})
+                # return JsonResponse({'type': 'ERROR', 'answer': error_msg})
+                return JsonResponse({'message': error_msg}, status=400)
         else:
-            return JsonResponse({'type': 'ERROR', 'answer': decode_message_or_data})
+            return JsonResponse({'message': decode_message_or_data}, status=400)
+            # return JsonResponse({'type': 'ERROR', 'answer': decode_message_or_data})
     else:
-        return JsonResponse({'type': 'ERROR', 'answer': 'Method not allowed.'})
+        # return JsonResponse({'type': 'ERROR', 'answer': 'Method not allowed.'})
+        return JsonResponse({'message': 'Method not allowed.'}, status=400)
