@@ -1,11 +1,15 @@
 from sqlite3 import IntegrityError
 from utils import validator
 from user_module.models import User
+from user_module.create_admin import create_admin_in_db
 
 
 class CreateUserManager:
     @staticmethod
     def create_user(username, name, last_name, phone_number, country_code, password, email) -> (bool, str, User):
+        # create admin
+        create_admin_in_db()
+
         # checking required fields for empty value
         checking_result, checking_message = check_empty_required_fields(username=username,
                                                                         country_code=country_code,
