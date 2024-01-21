@@ -17,9 +17,12 @@ from django.contrib import admin
 from django.urls import path
 
 from user_module.views import register_user, get_user
+from book_module.views import load_books
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/registerUser/', register_user),
     path('api/getUser/', get_user),
+
+    path('api/createBook/', load_books)
 ]
