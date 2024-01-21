@@ -1,6 +1,6 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from sqlite3 import IntegrityError
+from rest_framework import serializers
 
 
 class BookManager(models.Manager):
@@ -15,23 +15,13 @@ class Book(models.Model):
     genres = ArrayField(models.IntegerField())
     chapters = ArrayField(models.TextField())
 
-
     objects = BookManager()
 
     def str(self):
         return self.author
 
 
-
-def create_book(author: str, title: str, storyline: str, chapters_total_count: int, genres: [int], chapters: [str]) -> (bool, Book):
-    try:
-        book = Book(author=author,
-                    title=title,
-                    storyline=storyline,
-                    chapters_total_count=chapters_total_count,
-                    genres=genres,
-                    chapters=chapters)
-        book.save()
-        return True, book
-    except IntegrityError:
-        return False, None
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = '__all__'
