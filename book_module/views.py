@@ -29,10 +29,13 @@ def load_books(request):
 @csrf_exempt
 def get_book(request):
     if request.method == 'POST':
-        decoder_result, data = decoder.utils_decode(request, [])
+        decoder_result, data = decoder.utils_decode(request, ['id'])
         if decoder_result is False: return JsonResponse({'message': 'DECODING ERROR'}, status=400)
+
         serializable_result, serializable_book = db_manager.get_book_from_db(data.get('id', None))
-        if serializable_result is False: return JsonResponse({'message': serializable_book}, status=400)
-        return JsonResponse({'book': serializable_book}, status=200)
+
+        if serializable_result is False: return JsonResponse({'message': "Serialization error."}, status=400)
+
+        return serializable_book
     else:
         return JsonResponse({'message': 'Method not allowed.'}, status=400)
