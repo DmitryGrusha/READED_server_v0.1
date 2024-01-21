@@ -43,7 +43,7 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, serializers
 from rest_framework.permissions import IsAuthenticated
 
 from django.http import Http404
@@ -62,7 +62,27 @@ class CreateBook(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+from rest_framework.schemas import AutoSchema
+import coreapi
+
+class BookSchema(AutoSchema):
+    def get_manual_fields(self, path, method):
+        extra_fields = []
+        if method.lower() == 'post':
+            extra_fields = [
+                coreapi.Field(
+                    "id",
+                    required=True,
+                    location="form",
+                    description="ID of the book"
+                )
+            ]
+        return super().get_manual_fields(path, method) + extra_fields
+
+
+
 class GetBookById(APIView):
+    schema = BookSchema()
     @csrf_exempt
     def post(self, request):
         book_id = request.data.get('id', None)
