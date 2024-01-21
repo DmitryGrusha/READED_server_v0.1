@@ -3,3 +3,4 @@ Django==5.0.1
 sqlparse==0.4.4
 gunicorn
 phonenumbers==8.13.28
+psycopg2-binary==2.9.9
