@@ -1,3 +1,5 @@
+from django.http import JsonResponse
+
 from user_module.models import User
 from book_module.models import Book
 
@@ -18,18 +20,15 @@ def get_user_from_db(user_id):
     except:
         return False, "Serialization error."
 
-
 def get_book_from_db(book_id):
     try:
         book = Book.objects.get(pk=book_id)
-        serialized_book = {
-            'id': book.id,
-            'author': book.author,
-            'title': book.title,
-            'storyline': book.storyline,
-            'genres': book.genres,
-            'chapters': book.chapters
-        }
-        return True, serialized_book
+        return True, JsonResponse({ 'id': book.id,
+                                    'author': book.author,
+                                    'title': book.title,
+                                    'storyline': book.storyline,
+                                    'chapters_count': book.chapters_total_count,
+                                    'genres': book.genres,
+                                    'chapters': book.chapters }, status=200)
     except:
         return False, "Serialization error."
