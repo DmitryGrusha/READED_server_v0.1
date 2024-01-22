@@ -1,6 +1,5 @@
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
-from rest_framework import serializers
 
 
 class BookManager(models.Manager):
@@ -19,9 +18,3 @@ class Book(models.Model):
 
     def str(self):
         return self.author
-
-
-class BookSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Book
-        fields = '__all__'

@@ -1,6 +1,4 @@
 from django.db import models
-from rest_framework import serializers
-from utils import validator
 
 class UserManager(models.Manager):
     pass
@@ -29,16 +27,3 @@ class User(models.Model):
 
     def str(self):
         return self.name
-
-
-
-class UserCreateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = ['username', 'country_code', 'phone_number', 'password']
-
-
-class UserGetSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User
-        fields = '__all__'

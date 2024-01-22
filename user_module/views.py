@@ -1,5 +1,40 @@
-from django.views.decorators.csrf import csrf_exempt
-from utils import decoder, db_manager
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.core.exceptions import ObjectDoesNotExist
+from .serializers import *
+
+class RegisterUser(APIView):
+    def post(self, request):
+        serializer = UserCreateSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            try:
+                user = User.objects.get(username=serializer.data.get('username', None))
+            except ObjectDoesNotExist:
+                return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+            full_serializer = UserGetSerializer(user)
+            return Response(full_serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetUserById(APIView):
+    def post(self, request):
+        user_id = request.data.get('id', None)
+        if user_id is None:
+            return Response({'message': 'Missing "id" property in the request body.'}, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            user = User.objects.get(id=user_id)
+        except ObjectDoesNotExist:
+            return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
+
+        serializer = UserGetSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+from utils import decoder
 from user_module.create_user import CreateUserManager
 
 #
@@ -58,43 +93,3 @@ from user_module.create_user import CreateUserManager
 #             return JsonResponse({'message': decode_message_or_data}, status=400)
 #     else:
 #         return JsonResponse({'message': 'Method not allowed.'}, status=400)
-
-from rest_framework.views import APIView
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.response import Response
-from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-
-
-from django.core.exceptions import ObjectDoesNotExist
-from .models import User, UserCreateSerializer, UserGetSerializer
-
-class RegisterUser(APIView):
-    @csrf_exempt
-    def post(self, request):
-        serializer = UserCreateSerializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            try:
-                user = User.objects.get(username=serializer.data.get('username', None))
-            except ObjectDoesNotExist:
-                return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-            full_serializer = UserGetSerializer(user)
-            return Response(full_serializer.data, status=status.HTTP_201_CREATED)
-        else:
-            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
-class GetUserById(APIView):
-    @csrf_exempt
-    def post(self, request):
-        user_id = request.data.get('id', None)
-        if user_id is None:
-            return Response({'message': 'Missing "id" property in the request body.'}, status=status.HTTP_400_BAD_REQUEST)
-        try:
-            user = User.objects.get(id=user_id)
-        except ObjectDoesNotExist:
-            return Response({'message': 'User not found.'}, status=status.HTTP_404_NOT_FOUND)
-
-        serializer = UserGetSerializer(user)
-        return Response(serializer.data, status=status.HTTP_200_OK)

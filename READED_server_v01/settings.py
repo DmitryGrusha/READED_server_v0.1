@@ -26,9 +26,7 @@ SECRET_KEY = 'django-insecure-6i_gx039ekjq=0shnphx80b2v0xjpl)4whl1%3#g1!=le+fzmh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mutual-correct-impala.ngrok-free.app',
-                 'reader-server-947b82cc9eda.herokuapp.com',
-                 '127.0.0.1']
+ALLOWED_HOSTS = ['mutual-correct-impala.ngrok-free.app']
 
 
 # Application definition
@@ -40,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework_swagger',
     'rest_framework',
     'user_module',
     'book_module',
@@ -70,27 +67,19 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+            'libraries': {
+                'staticfiles': 'django.templatetags.static',
+            }
         },
     },
 ]
 
 WSGI_APPLICATION = 'READED_server_v01.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-#
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': "readed_database",
+        'NAME': "READED_v0.1_db",
         'USER': 'admin',
         'PASSWORD': 'assassingsgreed1',
         'HOST': '127.0.0.1',
@@ -142,6 +131,10 @@ STATIC_URL = '/static/'
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' #
 }
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://mutual-correct-impala.ngrok-free.app'
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

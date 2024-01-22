@@ -1,5 +1,5 @@
 from django.urls import path
-from book_module.views import GetBookById, CreateBook
+from .views import CreateBook, GetBookById
 
 urlpatterns = [
     path('createBook', CreateBook.as_view(), name='create-book'),
