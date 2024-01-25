@@ -26,7 +26,9 @@ SECRET_KEY = 'django-insecure-6i_gx039ekjq=0shnphx80b2v0xjpl)4whl1%3#g1!=le+fzmh
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['mutual-correct-impala.ngrok-free.app']
+ALLOWED_HOSTS = ['mutual-correct-impala.ngrok-free.app',
+                 '127.0.0.1'
+                 ]
 
 
 # Application definition

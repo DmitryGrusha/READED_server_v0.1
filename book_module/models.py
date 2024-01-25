@@ -7,6 +7,7 @@ class BookManager(models.Manager):
 
 
 class Book(models.Model):
+    """Book main model"""
     author = models.TextField()
     title = models.TextField()
     storyline = models.TextField()

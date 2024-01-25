@@ -20,10 +20,12 @@ from user_module import urls as user_module_urls
 from book_module import urls as book_module_urls
 
 
+api_path = 'api/v1/'
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     # rest
-    path('api/', include(user_module_urls)),
-    path('api/', include(book_module_urls)),
+    path(api_path, include(user_module_urls)),
+    path(api_path, include(book_module_urls)),
 ]
 
